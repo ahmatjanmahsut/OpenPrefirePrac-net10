@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CounterStrikeSharp.API" Version="1.0.376" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.0" />
+    <PackageReference Include="MaxMind.GeoIP2" Version="5.2.0" />
+    <PackageReference Include="MaxMind.Db" Version="4.1.0" />
+  </ItemGroup>
+
+  <!-- 不分发 CSS 宿主自带的程序集(避免版本冲突) -->
+  <Target Name="PruneHostProvidedAssemblies" AfterTargets="Build">
+    <ItemGroup>
+      <HostProvided Include="$(OutputPath)CounterStrikeSharp.API.dll" />
+      <HostProvided Include="$(OutputPath)Microsoft.Extensions.*.dll" />
+      <HostProvided Include="$(OutputPath)System.Text.Json.dll" />
+    </ItemGroup>
+    <Delete Files="@(HostProvided)" ContinueOnError="true" />
+  </Target>
+</Project>
